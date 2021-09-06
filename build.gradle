@@ -16,10 +16,22 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.template:soy:2021-02-01'
+	implementation files('soy.jar')
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+task buildSoy(type: JavaExec) {
+	group = "Execution"
+	description = "Run the main class with JavaExecTask"
+	classpath = sourceSets.main.runtimeClasspath
+	main = "com.google.template.soy.SoyToJbcSrcCompiler"
+	args = [
+			"--srcs", "src/main/resources/static/soy/",
+			"--output", "soy.jar"
+	]
 }
